@@ -1,6 +1,19 @@
+// src/users/user.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+@Entity()
 export class User {
-    id: number;
-    username: string;
-    password: string; // Recuerda que esta es una práctica no recomendada para producción
-  }
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  email: string;
+}
+
   
