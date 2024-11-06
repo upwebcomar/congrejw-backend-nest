@@ -17,7 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       retryAttempts: 2,       // Número de intentos de reconexión
       retryDelay: 3000,       // Tiempo de espera entre intentos (en ms)
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // ¡No usar en producción!
+      synchronize: false, // ¡No usar en producción!
     })
   ],
   controllers: [AppController,AuthController],
