@@ -1,26 +1,42 @@
-import { Module } from '@nestjs/common';
+// src/app.module.ts
+import { Logger, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'mariadb', // o el tipo de base de datos que uses
-      host: 'db.upweb.com.ar',
-      port: 3306,
-      username: 'apicongrejw',
-      password: 'Dieguiamor*1981',
-      database: 'apicongrejw',
-      retryAttempts: 2,       // Número de intentos de reconexión
-      retryDelay: 3000,       // Tiempo de espera entre intentos (en ms)
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false, // ¡No usar en producción!
-    })
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // hace que el módulo esté disponible en toda la aplicación
+      envFilePath: '.env', // especifica el archivo de variables de entorno
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get<string>('DB_HOST'),
+        port: parseInt(configService.get<string>('DB_PORT'), 10),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        retryAttempts: 2,
+        retryDelay: 3000,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: false, // ¡No usar en producción!
+        afterConnect: () => {
+          const logger = new Logger('TypeORM');
+          logger.log('Conexión con la base de datos establecida correctamente.');
+        },
+        logging:true
+      }),
+    }),
+    AuthModule,
   ],
-  controllers: [AppController,AuthController],
+  controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
