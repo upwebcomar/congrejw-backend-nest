@@ -18,6 +18,7 @@ export class UserService {
 
   // Crear un nuevo usuario
   async createUser(user: User): Promise<void> {
+    
     await this.userRepository.save(user);
   }
 }

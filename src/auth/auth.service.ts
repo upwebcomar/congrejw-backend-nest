@@ -39,23 +39,28 @@ export class AuthService {
 
   // Método de registro
   async register(registerDto: RegisterDto) {
-    const { username, password, email } = registerDto;
-
+    
+    
+    
     // Verificar si el usuario ya existe
-    const existingUser = await this.userService.findByUsername(username);
+    const existingUser = await this.userService.findByUsername(registerDto.username);
     if (existingUser) {
       throw new Error('Username already exists');
     }
 
     // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+
 
     // Crear el usuario
     const newUser = new User();
-    newUser.username = username;
+    
+    newUser.username = registerDto.username;
     newUser.password = hashedPassword;
-    newUser.email = email;
+    newUser.email = registerDto.email;
 
+    
+    
     // Guardar el usuario en la base de datos
     await this.userService.createUser(newUser);
 
