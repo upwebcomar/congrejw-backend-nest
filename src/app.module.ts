@@ -1,5 +1,5 @@
 // src/app.module.ts
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -27,11 +27,7 @@ import { AuthController } from './auth/auth.controller';
         retryDelay: 3000,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false, // ¡No usar en producción!
-        afterConnect: () => {
-          const logger = new Logger('TypeORM');
-          logger.log('Conexión con la base de datos establecida correctamente.');
-        },
-        logging:true
+        logging: false,
       }),
     }),
     AuthModule,
