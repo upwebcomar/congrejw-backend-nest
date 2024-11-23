@@ -14,6 +14,9 @@ export class User {
 
   @Column()
   email: string;
+
+  @Column("simple-array") // Almacena como texto separado por comas (ej: 'admin,user')
+  roles: string[]; // Por ejemplo: ['admin', 'user']
 }
 
   

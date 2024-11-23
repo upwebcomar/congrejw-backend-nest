@@ -19,4 +19,6 @@ export class AppService implements OnApplicationBootstrap {
       this.logger.error('Error al conectar con la base de datos:', error);
     }
   }
+
+  getHello(){return 'api-congrejw funcionando'}
 }

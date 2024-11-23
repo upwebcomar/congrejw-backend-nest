@@ -1,5 +1,5 @@
 // src/auth/auth.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -12,13 +12,14 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    
   ) {}
 
   // Método de login
   async login(loginDto: LoginDto) {
     const { username, password } = loginDto;
     
-    // Buscar al usuario en la base de datos
+    // Buscar al usuario en la base de datos - TODO: verificar si no user el mail en el mismo campo user
     const user = await this.userService.findByUsername(username);
     if (!user) {
       throw new Error('Invalid credentials');
@@ -31,9 +32,11 @@ export class AuthService {
     }
 
     // Generar JWT
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, sub: user.id, roles: user.roles };
+    const access_token = this.jwtService.sign(payload)
+    console.log(payload)
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: access_token ,
     };
   }
 
@@ -58,6 +61,7 @@ export class AuthService {
     newUser.username = registerDto.username;
     newUser.password = hashedPassword;
     newUser.email = registerDto.email;
+    newUser.roles = ['user']; //role user por defecto
 
     
     
