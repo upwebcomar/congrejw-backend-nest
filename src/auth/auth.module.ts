@@ -17,7 +17,7 @@ import { User } from 'src/users/user.entity';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRETKEY'), // Lee la clave secreta de la configuración
         signOptions: {
-          expiresIn: '1h', // Opcional: tiempo de expiración con valor por defecto
+          expiresIn: 604800, // 7 días en segundos
         },
       }),
       inject: [ConfigService], // Inyecta ConfigService para usarlo en la fábrica

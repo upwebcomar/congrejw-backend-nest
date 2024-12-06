@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { AdminController } from './controllers/admin.controller';
+import { FilesModule } from './upload/files.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -32,8 +34,18 @@ import { AdminController } from './controllers/admin.controller';
       }),
     }),
     AuthModule,
+    FilesModule,
+    DatabaseModule,
   ],
-  controllers: [AppController, AuthController,AdminController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+     AuthController,
+     AdminController,
+     
+    ],
+     
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}
