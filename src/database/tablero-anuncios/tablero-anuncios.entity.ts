@@ -14,6 +14,9 @@ export class TableroAnuncios {
   @Column()
   pathfile: string;
 
+  @Column()
+  page: string;
+
   @Column({ type: 'tinyint' })
   show_all: number;
 

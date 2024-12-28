@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { TableroAnuncios } from './tablero-anuncios.entity';
 import { CreateAnuncioDto } from './create-anuncio.dto';
 import { FilesService } from 'src/upload/files.service';
+import { log } from 'console';
 
 @Injectable()
 export class TableroAnunciosService {
@@ -42,19 +43,28 @@ async update(
   if (!anuncio) {
     throw new Error('Anuncio no encontrado');
   }
-
+  console.log('Anuncion encontrado',anuncio);
+  
   // Verificar si hay un nuevo archivo
   if (newFile) {
     // Si hay un archivo anterior, eliminarlo
     if (anuncio.pathfile) {
-      this.filesService.deleteFile(anuncio.pathfile);
+      try{
+        this.filesService.deleteFile(anuncio.pathfile);
+      }catch (error){
+        console.log('filesService.deleteFile:',error);
+        
+      }
     }
 
     // Guardar el nuevo archivo en el sistema de archivos
-    this.filesService.saveFile(this.filesService.sanitizeFileName(newFile.originalname), newFile.buffer);
-
-    // Actualizar el pathfile en el DTO
-    updateAnuncioDto.pathfile = newFile.originalname;
+    try {
+    const filepath = this.filesService.saveFile(this.filesService.sanitizeFileName(newFile.originalname), newFile.buffer);
+        // Actualizar el pathfile en el DTO
+    updateAnuncioDto.pathfile = filepath ;
+    }catch (error){
+      console.log('filesService.saveFile:', error);
+    }
   }
 
   // Actualizamos el anuncio con los nuevos datos

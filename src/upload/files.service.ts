@@ -39,7 +39,7 @@ export class FilesService {
       let filePath = filepath ? join(this.uploadDir, filepath) : join(this.uploadDir, filenameSanitezed);
       writeFileSync(filePath, data); // Guarda el archivo usando fs
       console.log(`File saved at: ${filePath}`);
-      return filePath
+      return filenameSanitezed
     } catch (error) {
       console.error('Error saving file:', error);
       throw new Error('Could not save file');
