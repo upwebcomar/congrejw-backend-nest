@@ -6,6 +6,7 @@ import { CreateAnuncioDto } from './create-anuncio.dto';
 import { FilesService } from 'src/upload/files.service';
 
 @Controller('tablero-anuncios')
+
 export class TableroAnunciosController {
   constructor(
     private readonly tableroAnunciosService: TableroAnunciosService,
@@ -32,8 +33,9 @@ export class TableroAnunciosController {
     @Body() createAnuncioDto: CreateAnuncioDto,
   ): Promise<TableroAnuncios> {
     const response = await this.tableroAnunciosService.create(createAnuncioDto as TableroAnuncios);
-
-    this.filesService.saveFile(response.pathfile, file.buffer);
+    if(file){
+      this.filesService.saveFile(response.pathfile, file.buffer);
+    }
     return response;
   }
   @Put('reorder')
@@ -72,7 +74,12 @@ export class TableroAnunciosController {
 
     // Borrar el archivo asociado al anuncio
     if (anuncio.pathfile) {
+      try {
       this.filesService.deleteFile(anuncio.pathfile); // Borrar el archivo
+      }catch (error){
+        console.log(error);
+        
+      }
     }
 
     // Eliminar el anuncio de la base de datos

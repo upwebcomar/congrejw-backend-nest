@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { GruposServiciodelcampo } from './grupos-serviciodelcampo.entity';
-import { GruposServiciodelcampoService } from './grupos-serviciodelcampo.service';
 import { CreateGruposServiciodelcampoDto } from './dto/create-grupos-serviciodelcampo.dto';
 import { UpdateGruposServiciodelcampoDto } from './dto/update-grupos-serviciodelcampo.dto';
+import { GruposServiciodelcampo } from './grupos-serviciodelcampo.entity';
+import { GruposServiciodelcampoService } from './grupos-serviciodelcampo.service';
 
 @Controller('grupos-serviciodelcampo')
 export class GruposServiciodelcampoController {

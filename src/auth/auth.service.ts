@@ -1,11 +1,11 @@
 // src/auth/auth.service.ts
 import { Injectable, } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../users/users.service';
+import { UserService } from '../database/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { User } from '../users/user.entity';
+import { User } from '../database/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +21,8 @@ export class AuthService {
     
     // Buscar al usuario en la base de datos - TODO: verificar si no user el mail en el mismo campo user
     const user = await this.userService.findByUsername(username);
+    
+    
     if (!user) {
       throw new Error('Invalid credentials');
     }
@@ -32,9 +34,9 @@ export class AuthService {
     }
 
     // Generar JWT
-    const payload = { username: user.username, sub: user.id, roles: user.roles };
+    const payload = { username: user.username, userId: user.id, roles: user.roles };
     const access_token = this.jwtService.sign(payload)
-    console.log(payload)
+    
     return {
       access_token: access_token ,
     };
@@ -63,10 +65,10 @@ export class AuthService {
     newUser.email = registerDto.email;
     newUser.roles = ['user']; //role user por defecto
 
-    
+    const newProfile = {name:newUser.username,email:newUser.email}
     
     // Guardar el usuario en la base de datos
-    await this.userService.createUser(newUser);
+    await this.userService.createUserWithProfile(newUser,newProfile);
 
     return { message: 'User registered successfully' };
   }
