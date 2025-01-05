@@ -1,13 +1,20 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Get, Param, Res, HttpException, HttpStatus, Delete } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Get, Param, Res, HttpException, HttpStatus, Delete, UseGuards } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { UploadInterceptor } from './upload.interceptor';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('files')
+@UseGuards(JwtAuthGuard, RolesGuard)
+
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) { }
 
   @Post('upload')
+  @Roles('admin')
+
   @UseInterceptors(UploadInterceptor.createInterceptor('./uploads')) // Ruta directa
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log('Uploaded file:', file);
@@ -45,6 +52,8 @@ export class FilesController {
   }
 
   @Delete('delete/:filename')  // Endpoint para eliminar un archivo
+  @Roles('admin')
+
   deleteFile(@Param('filename') filename: string) {
     try {
       // Eliminar el archivo usando el servicio
