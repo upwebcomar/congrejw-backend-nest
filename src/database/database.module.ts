@@ -15,6 +15,9 @@ import { User } from './users/user.entity';
 import { UserService } from './users/users.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserController } from './users/user.controller';
+import { Notification } from './notifications/notification.entity';
+import { NotificationService } from './notifications/notification.service';
+import { NotificationController } from './notifications/notification.controller';
 
 @Module({
     imports:[
@@ -22,7 +25,8 @@ import { UserController } from './users/user.controller';
             TableroAnuncios,
             GruposServiciodelcampo,
             Profiles,
-            User
+            User,
+            Notification
         ]),
         FilesModule,
         
@@ -32,7 +36,8 @@ import { UserController } from './users/user.controller';
         FilesService,
         GruposServiciodelcampoService,
         ProfilesService,
-        UserService
+        UserService,
+        NotificationService
 
     ],
     exports:[
@@ -41,13 +46,15 @@ import { UserController } from './users/user.controller';
         FilesService,
         ProfilesService,
         UserService,
-        TypeOrmModule
+        TypeOrmModule,
+        NotificationService
     ],
     controllers:[
         TableroAnunciosController,
         GruposServiciodelcampoController,
         ProfilesController,
-        UserController
+        UserController,
+        NotificationController
 
     ]
 })
