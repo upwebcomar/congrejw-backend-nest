@@ -1,61 +1,52 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule, Logger } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TableroAnuncios } from './tablero-anuncios/tablero-anuncios.entity';
-import { TableroAnunciosService } from './tablero-anuncios/tablero-anuncios.service';
-import { TableroAnunciosController } from './tablero-anuncios/tablero-anuncios.controller';
-import { FilesModule } from 'src/upload/files.module';
-import { FilesService } from 'src/upload/files.service';
-import { GruposServiciodelcampoController } from './grupos-serviciodelcampo/grupos-serviciodelcampo.controller';
-import { GruposServiciodelcampoService } from './grupos-serviciodelcampo/grupos-serviciodelcampo.service';
-import { GruposServiciodelcampo } from './grupos-serviciodelcampo/grupos-serviciodelcampo.entity';
-import { Profiles } from './profiles/profiles.entity';
-import { ProfilesService } from './profiles/profiles.service';
-import { ProfilesController } from './profiles/profiles.controller';
-import { User } from './users/user.entity';
-import { UserService } from './users/users.service';
-import { AuthModule } from 'src/auth/auth.module';
-import { UserController } from './users/user.controller';
-import { Notification } from './notifications/notification.entity';
-import { NotificationService } from './notifications/notification.service';
-import { NotificationController } from './notifications/notification.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DatabaseConfigService } from './database.config';
+import { DatabaseConfigModule } from './databaseconfig.module';
 
-@Module({
-    imports:[
-        TypeOrmModule.forFeature([
-            TableroAnuncios,
-            GruposServiciodelcampo,
-            Profiles,
-            User,
-            Notification
-        ]),
-        FilesModule,
-        
-    ],
-    providers:[
-        TableroAnunciosService,
-        FilesService,
-        GruposServiciodelcampoService,
-        ProfilesService,
-        UserService,
-        NotificationService
+@Module({})
+export class DatabaseModule {
+  static forRoot(): DynamicModule {
+    const logger = new Logger(DatabaseModule.name);
 
-    ],
-    exports:[
-        TableroAnunciosService,
-        GruposServiciodelcampoService,
-        FilesService,
-        ProfilesService,
-        UserService,
-        TypeOrmModule,
-        NotificationService
-    ],
-    controllers:[
-        TableroAnunciosController,
-        GruposServiciodelcampoController,
-        ProfilesController,
-        UserController,
-        NotificationController
+    return {
+      module: DatabaseModule,
+      imports: [
+        ConfigModule,
+        TypeOrmModule.forRootAsync({
+          imports:[DatabaseConfigModule],
+          useFactory: async (
+            configService: ConfigService,
+            dbConfigService: DatabaseConfigService,
+          ) => {
+            try {
+              const dbConfig = await dbConfigService.getDatabaseConfig();
+         
 
-    ]
-})
-export class DatabaseModule {}
+              return {
+                ...dbConfig,
+                retryAttempts: 3,
+                retryDelay: 3000,
+              };
+            } catch (error) {
+              logger.error(
+                'No se pudo conectar a la base de datos. Continuando sin conexión:',
+                error.message,
+              );
+
+              return {
+                type: 'sqlite',
+                database: ':memory:',
+                entities: [],
+                synchronize: true,
+              };
+            }
+          },
+          inject: [ConfigService, DatabaseConfigService], // Inyección explícita
+        }),
+      ],
+      exports: [TypeOrmModule],
+      providers:[ConfigService]
+    };
+  }
+}

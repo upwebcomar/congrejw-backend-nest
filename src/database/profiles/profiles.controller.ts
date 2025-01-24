@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UnauthorizedException, UseGuards } from '@nestjs/common';
 import {  CreateProfileDto } from './dto/create-profile.dto';
 import { ProfilesService } from './profiles.service';
 import { Profiles } from './profiles.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UserProfileDto } from './dto/user-profile.dto';
+import { plainToInstance } from 'class-transformer';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('profiles')
+@UseGuards(JwtAuthGuard)
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
@@ -21,10 +25,11 @@ export class ProfilesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Profiles> {
-    console.log('param id',id);
+  async findOne(@Param('id') id: number): Promise<UserProfileDto> {
+    const profile = await this.profilesService.findOne(id);
+    const profileResponse = plainToInstance(UserProfileDto, profile, { excludeExtraneousValues: true });
+    return profileResponse
     
-    return this.profilesService.findOne(id);
   }
 
   @Put(':id')

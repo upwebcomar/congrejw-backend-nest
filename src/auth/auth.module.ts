@@ -17,14 +17,14 @@ import { UserService } from 'src/database/users/users.service';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRETKEY'), // Lee la clave secreta de la configuración
         signOptions: {
-          expiresIn: 604800, // 7 días en segundos
+          expiresIn: "30d", // 7 días en segundos
         },
       }),
       inject: [ConfigService], // Inyecta ConfigService para usarlo en la fábrica
     }),
     
   ],
-  providers: [AuthService, JwtStrategy, UserService],
+  providers: [AuthService, JwtStrategy,UserService],
   controllers: [AuthController],
   exports: [AuthService],
 })

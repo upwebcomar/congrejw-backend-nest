@@ -8,10 +8,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AllUserDto } from './dto/all-users.dto';
 import { plainToInstance } from 'class-transformer';
-import { UpdateRolesDto } from './dto/update-roles.dto';
 import { UserResponseDto } from './user-response.dto';
-import { Profiles } from '../profiles/profiles.entity';
-import { response } from 'express';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -30,11 +27,12 @@ export class UserController {
   
 
   @Get(':id')
-  @Roles('admin')
+  
 
   async findOne(@Param('id') id: number): Promise<UserResponseDto> {
     
     const user = await this.userService.findOne(id);
+
     const userResponse = plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true });
     userResponse.profile = user.profile
     return userResponse
