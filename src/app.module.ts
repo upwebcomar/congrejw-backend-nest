@@ -16,10 +16,10 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true, // hace que el módulo esté disponible en toda la aplicación
       envFilePath: process.env.NODE_ENV === 'production' ? undefined : '.env', // No cargar .env en producción
     }),
-
+    DatabaseModule.forRoot(),
     AuthModule,
     FilesModule,
-    DatabaseModule.forRoot(),
+   
   ],
   controllers: [
     AppController,

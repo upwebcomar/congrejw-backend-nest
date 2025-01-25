@@ -37,10 +37,13 @@ export class DatabaseConfigService {
         );
 
         if (attempt === maxRetries) {
-          console.log(`No se pudo conectar a la base de datos después de ${maxRetries} intentos.`);
+          // Agrega un mensaje más claro al error antes de lanzarlo
+          const customError = new Error(
+            `No se pudo conectar a la base de datos después de ${maxRetries} intentos. Último error: ${error.message}`
+          );
+          customError.stack = error.stack; // Mantén el stack original
+          throw customError;
 
-
-          return { ...options, entities: [] }; // Retorna una configuración mínima sin entidades
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));

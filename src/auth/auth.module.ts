@@ -6,12 +6,14 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { DatabaseModule } from 'src/database/database.module';
 import { UserService } from 'src/database/users/users.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/database/users/user.entity';
+import { Profiles } from 'src/database/profiles/profiles.entity';
 
 @Module({
   imports: [
     ConfigModule, // Asegúrate de importar ConfigModule
-    DatabaseModule,
-    //TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,Profiles]),
     JwtModule.registerAsync({
       imports: [ConfigModule], // Importa ConfigModule aquí
       useFactory: async (configService: ConfigService) => ({
