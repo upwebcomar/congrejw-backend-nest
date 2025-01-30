@@ -2,7 +2,6 @@ import { Module, DynamicModule, Logger } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseConfigService } from './database.config';
-import { DatabaseConfigModule } from './databaseconfig.module';
 import { FilesService } from 'src/upload/files.service';
 import { GruposServiciodelcampoService } from './grupos-serviciodelcampo/grupos-serviciodelcampo.service';
 import { NotificationService } from './notifications/notification.service';
@@ -19,6 +18,9 @@ import { GruposServiciodelcampoController } from './grupos-serviciodelcampo/grup
 import { NotificationController } from './notifications/notification.controller';
 import { ProfilesController } from './profiles/profiles.controller';
 import { TableroAnunciosController } from './tablero-anuncios/tablero-anuncios.controller';
+import { RolesService } from './roles/roles.service';
+import { RolesController } from './roles/roles.controller';
+import { RolesEntity } from './roles/roles.entity';
 
 @Module({})
 export class DatabaseModule {
@@ -53,6 +55,7 @@ export class DatabaseModule {
           Profiles,
           TableroAnuncios,
           User,
+          RolesEntity,
         ]),
       ],
       providers: [
@@ -61,6 +64,7 @@ export class DatabaseModule {
         FilesService,
         ProfilesService,
         UserService,
+        RolesService,
         NotificationService,
         ConfigService,
         DatabaseConfigService,
@@ -72,17 +76,19 @@ export class DatabaseModule {
         FilesService,
         ProfilesService,
         UserService,
+        RolesService,
         NotificationService,
         ConfigService,
         DatabaseConfigService,
       ],
-      controllers:[
+      controllers: [
         UserController,
+        RolesController,
         GruposServiciodelcampoController,
         NotificationController,
         ProfilesController,
-        TableroAnunciosController
-      ]
+        TableroAnunciosController,
+      ],
     };
   }
 
