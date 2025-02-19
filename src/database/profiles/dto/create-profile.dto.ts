@@ -7,8 +7,9 @@ export class CreateProfileDto implements UserProfile {
   @IsString()
   email: string;
   @IsString()
+  image: string;
+  @IsString()
   phone: string;
   @IsString()
   address: string;
-
 }

@@ -1,5 +1,5 @@
-import { IsOptional, IsString } from "class-validator";
-import { UserProfile } from "./user-profile.interface";
+import { IsOptional, IsString } from 'class-validator';
+import { UserProfile } from './user-profile.interface';
 
 export class UpdateProfileDto {
   @IsString()
@@ -9,6 +9,10 @@ export class UpdateProfileDto {
   @IsString()
   @IsOptional()
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
 
   @IsString()
   @IsOptional()

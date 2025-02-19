@@ -1,5 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UnauthorizedException, UseGuards } from '@nestjs/common';
-import {  CreateProfileDto } from './dto/create-profile.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
+import { CreateProfileDto } from './dto/create-profile.dto';
 import { ProfilesService } from './profiles.service';
 import { Profiles } from './profiles.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -13,9 +23,7 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  async create(
-    @Body() data: CreateProfileDto,
-  ): Promise<Profiles> {
+  async create(@Body() data: CreateProfileDto): Promise<Profiles> {
     return this.profilesService.create(data);
   }
 
@@ -27,9 +35,10 @@ export class ProfilesController {
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<UserProfileDto> {
     const profile = await this.profilesService.findOne(id);
-    const profileResponse = plainToInstance(UserProfileDto, profile, { excludeExtraneousValues: true });
-    return profileResponse
-    
+    const profileResponse = plainToInstance(UserProfileDto, profile, {
+      excludeExtraneousValues: true,
+    });
+    return profileResponse;
   }
 
   @Put(':id')
