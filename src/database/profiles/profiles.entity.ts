@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { UserProfile } from './dto/user-profile.interface';
 import { User } from 'src/database/users/user.entity';
 
@@ -14,13 +20,14 @@ export class Profiles implements UserProfile {
   email: string;
 
   @Column()
+  image: string;
+
+  @Column()
   phone: string;
 
   @Column()
   address: string;
 
   @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE' })
-
   user: User;
-
 }

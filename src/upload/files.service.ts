@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { join } from 'path';
-import { existsSync, mkdirSync, readdirSync, writeFileSync, unlinkSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  writeFileSync,
+  unlinkSync,
+} from 'fs';
 
 @Injectable()
 export class FilesService {
@@ -23,6 +29,9 @@ export class FilesService {
   getFilePath(filename: string): string {
     return join(this.uploadDir, filename);
   }
+  getFileBase(): string {
+    return this.uploadDir;
+  }
 
   getAllFiles(): string[] {
     try {
@@ -34,12 +43,14 @@ export class FilesService {
   }
 
   saveFile(filename: string, data: Buffer, filepath?: string): string {
-    let filenameSanitezed = this.sanitizeFileName(filename)
+    let filenameSanitezed = this.sanitizeFileName(filename);
     try {
-      let filePath = filepath ? join(this.uploadDir, filepath) : join(this.uploadDir, filenameSanitezed);
+      let filePath = filepath
+        ? join(this.uploadDir, filepath)
+        : join(this.uploadDir, filenameSanitezed);
       writeFileSync(filePath, data); // Guarda el archivo usando fs
       console.log(`File saved at: ${filePath}`);
-      return filenameSanitezed
+      return filenameSanitezed;
     } catch (error) {
       console.error('Error saving file:', error);
       throw new Error('Could not save file');
@@ -72,5 +83,4 @@ export class FilesService {
       .replace(/[\u0300-\u036f]/g, '') // Elimina marcas diacríticas
       .replace(/[^a-zA-Z0-9._-]/g, '_'); // Sustituye caracteres no válidos por "_"
   }
-  
 }

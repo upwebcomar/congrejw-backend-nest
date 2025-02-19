@@ -21,6 +21,9 @@ import { TableroAnunciosController } from './tablero-anuncios/tablero-anuncios.c
 import { RolesService } from './roles/roles.service';
 import { RolesController } from './roles/roles.controller';
 import { RolesEntity } from './roles/roles.entity';
+import { Book } from './lectura-biblia/book.entity';
+import { BooksController } from './lectura-biblia/books.controller';
+import { BooksService } from './lectura-biblia/books.service';
 
 @Module({})
 export class DatabaseModule {
@@ -56,6 +59,7 @@ export class DatabaseModule {
           TableroAnuncios,
           User,
           RolesEntity,
+          Book,
         ]),
       ],
       providers: [
@@ -68,6 +72,7 @@ export class DatabaseModule {
         NotificationService,
         ConfigService,
         DatabaseConfigService,
+        BooksService,
       ],
       exports: [
         TypeOrmModule,
@@ -80,6 +85,7 @@ export class DatabaseModule {
         NotificationService,
         ConfigService,
         DatabaseConfigService,
+        BooksService,
       ],
       controllers: [
         UserController,
@@ -88,6 +94,7 @@ export class DatabaseModule {
         NotificationController,
         ProfilesController,
         TableroAnunciosController,
+        BooksController,
       ],
     };
   }
