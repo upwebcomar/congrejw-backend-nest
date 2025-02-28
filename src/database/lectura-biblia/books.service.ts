@@ -73,4 +73,21 @@ export class BooksService {
     // Guardar el libro (actualizado o creado)
     return this.booksRepository.save(book);
   }
+  async getBooksWithReadCount(userId: number) {
+    const books = await this.booksRepository.find({
+      where: { userId },
+      select: ['id', 'name', 'chapters', 'readChapters'],
+    });
+
+    return books
+      .map((book) => ({
+        id: book.id,
+        name: book.name,
+        chapters: book.chapters,
+        totalReadChapters: Array.isArray(book.readChapters)
+          ? book.readChapters.length
+          : 0, // Evita problemas con null
+      }))
+      .filter((book) => book.totalReadChapters > 0); // Filtrar solo libros con capítulos leídos
+  }
 }

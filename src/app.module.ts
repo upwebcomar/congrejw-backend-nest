@@ -9,6 +9,8 @@ import { AuthController } from './auth/auth.controller';
 import { AdminController } from './controllers/admin.controller';
 import { FilesModule } from './upload/files.module';
 import { DatabaseModule } from './database/database.module';
+import { MailModule } from './mail/mail.module';
+import { MyGateway } from './websocket/mygateway';
 
 @Module({
   imports: [
@@ -19,17 +21,10 @@ import { DatabaseModule } from './database/database.module';
     DatabaseModule.forRoot(),
     AuthModule,
     FilesModule,
-   
+    MailModule,
   ],
-  controllers: [
-    AppController,
-     AuthController,
-     AdminController,
-     
-    ],
-     
-  providers: [
-    AppService,
-  ],
+  controllers: [AppController, AuthController, AdminController],
+
+  providers: [AppService, MyGateway],
 })
 export class AppModule {}

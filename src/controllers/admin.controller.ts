@@ -9,7 +9,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class AdminController {
   @Get()
   @Roles('admin') // Sólo los usuarios con el rol 'admin' pueden acceder
-  getAdminPanel() {
+  async getAdminPanel() {
     return { message: 'Bienvenido al panel de administrador' };
   }
 }

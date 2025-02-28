@@ -28,8 +28,15 @@ export class FilesController {
   @Roles('admin')
   @UseInterceptors(UploadInterceptor.createInterceptor('./uploads')) // Ruta directa
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log('Uploaded file:', file);
     return { message: 'File uploaded successfully', filename: file.filename };
+  }
+  @Post('image-profile/upload')
+  @Roles('user')
+  @UseInterceptors(
+    UploadInterceptor.createInterceptor('./uploads/images-profile'),
+  ) // Ruta directa
+  uploadImageProfile(@UploadedFile() file: Express.Multer.File) {
+    return { message: 'Image uploaded successfully', filename: file.filename };
   }
 
   @Get(':filename')
@@ -42,7 +49,6 @@ export class FilesController {
   getImageProfile(@Param('filename') filename: string, @Res() res: Response) {
     const filePathBase = this.filesService.getFileBase();
     const filePath = join(filePathBase, 'images-profile', filename);
-    console.log(filePath);
 
     res.sendFile(filePath);
   }

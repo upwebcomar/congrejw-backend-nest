@@ -30,4 +30,9 @@ export class BooksController {
     const result = await this.booksService.updateBook(userId, book);
     return result;
   }
+
+  @Get('user/progress/:userId')
+  async getBooksProgress(@Param('userId') userId: number) {
+    return this.booksService.getBooksWithReadCount(userId);
+  }
 }
