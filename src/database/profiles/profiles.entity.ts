@@ -5,11 +5,11 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { UserProfile } from './dto/user-profile.interface';
+import { Profile } from './dto/profile.interface';
 import { User } from 'src/database/users/user.entity';
 
 @Entity('profiles')
-export class Profiles implements UserProfile {
+export class Profiles implements Profile {
   @PrimaryGeneratedColumn()
   id: number;
 

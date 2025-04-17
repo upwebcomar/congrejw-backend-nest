@@ -1,5 +1,4 @@
 import { IsOptional, IsString } from 'class-validator';
-import { UserProfile } from './user-profile.interface';
 
 export class UpdateProfileDto {
   @IsString()

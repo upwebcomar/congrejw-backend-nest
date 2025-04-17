@@ -11,6 +11,7 @@ import { FilesModule } from './upload/files.module';
 import { DatabaseModule } from './database/database.module';
 import { MailModule } from './mail/mail.module';
 import { MyGateway } from './websocket/mygateway';
+import { PushNotificationModule } from './push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MyGateway } from './websocket/mygateway';
     AuthModule,
     FilesModule,
     MailModule,
+    PushNotificationModule,
   ],
   controllers: [AppController, AuthController, AdminController],
 

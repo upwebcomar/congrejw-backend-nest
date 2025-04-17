@@ -1,7 +1,7 @@
 import { IsString, IsOptional } from 'class-validator';
-import { UserProfile } from './user-profile.interface';
+import { Profile } from './profile.interface';
 
-export class CreateProfileDto implements UserProfile {
+export class CreateProfileDto implements Profile {
   @IsString()
   name: string;
   @IsString()
