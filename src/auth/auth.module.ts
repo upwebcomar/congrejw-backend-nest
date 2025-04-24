@@ -9,25 +9,26 @@ import { UserService } from 'src/database/users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/database/users/user.entity';
 import { Profiles } from 'src/database/profiles/profiles.entity';
+import { GoogleStrategy } from './google.strategy';
+import { AuthGoogleController } from './auth-google.controller';
 
 @Module({
   imports: [
     ConfigModule, // Asegúrate de importar ConfigModule
-    TypeOrmModule.forFeature([User,Profiles]),
+    TypeOrmModule.forFeature([User, Profiles]),
     JwtModule.registerAsync({
       imports: [ConfigModule], // Importa ConfigModule aquí
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRETKEY'), // Lee la clave secreta de la configuración
         signOptions: {
-          expiresIn: "30d", // 7 días en segundos
+          expiresIn: '30d', // 7 días en segundos
         },
       }),
       inject: [ConfigService], // Inyecta ConfigService para usarlo en la fábrica
     }),
-    
   ],
-  providers: [AuthService, JwtStrategy,UserService],
-  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, UserService],
+  controllers: [AuthController, AuthGoogleController],
   exports: [AuthService],
 })
 export class AuthModule {}

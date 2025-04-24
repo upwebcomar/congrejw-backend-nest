@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { glob } from 'glob';
+import * as path from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 @Injectable()
@@ -7,6 +9,8 @@ export class DatabaseConfigService {
   constructor(private readonly configService: ConfigService) {}
 
   async getDatabaseConfig(): Promise<DataSourceOptions> {
+    // Usamos glob para buscar las entidades en la carpeta dist. devuelve array de rutas
+    const entitiesPath = glob.sync('dist/database/**/*.entity.{ts,js}');
     const options: DataSourceOptions = {
       type: 'mariadb' as 'mariadb',
       host: this.configService.get<string>('DB_HOST'),
@@ -14,13 +18,13 @@ export class DatabaseConfigService {
       username: this.configService.get<string>('DB_USERNAME'),
       password: this.configService.get<string>('DB_PASSWORD'),
       database: this.configService.get<string>('DB_DATABASE'),
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      entities: entitiesPath,
       synchronize: false,
       logging: false,
     };
 
     // Sacar configuracion de la base de datos por log
-    //console.log('Configuración de la base de datos:', options);
+    console.log('Configuración de la base de datos:', options);
 
     const maxRetries = 5; // Máximo número de reintentos
     const retryDelay = 3000; // Tiempo entre reintentos en milisegundos

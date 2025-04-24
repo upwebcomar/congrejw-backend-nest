@@ -21,6 +21,12 @@ export class UserService {
       relations: ['profile'],
     });
   }
+  // Buscar usuario por nombre de usuario
+  async findByEmail(email: string): Promise<User | undefined> {
+    return this.userRepository.findOne({
+      where: { email },
+    });
+  }
   async findOne(id: number): Promise<User | undefined> {
     const response = await this.userRepository.findOne({
       where: { id },
